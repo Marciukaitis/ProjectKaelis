@@ -8,23 +8,30 @@ export async function submitReservation(data) {
     source: "chatbot",
     createdAt: new Date().toISOString(),
   };
+
   const response = await fetch("/api/reservation", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
+
+  const result = await response.json().catch(() => ({}));
+
   if (!response.ok) {
-    throw new Error("No se pudo enviar la solicitud");
+    throw new Error(
+      result.message || "No se pudo enviar la solicitud",
+    );
   }
-  return response.json();
+
+  return result;
 }
+
 export function isReservationComplete(data) {
   return Boolean(
     data.nombre &&
-    data.telefono &&
-    data.fechaBoda &&
+      data.telefono &&
+      data.fechaBoda &&
     data.estiloPreferido &&
-    data.colorPreferido &&
     data.talleAproximado,
   );
 }

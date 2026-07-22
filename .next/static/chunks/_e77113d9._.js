@@ -500,8 +500,7 @@ const RESERVATION_PROMPTS = {
     nombre: "Perfecto. Para agendar tu cita, ¿cuál es tu nombre?",
     telefono: "Gracias. ¿Cuál es tu número de teléfono?",
     fecha: "¿Cuál es la fecha de tu boda?",
-    estilo: "¿Qué estilo de vestido te gusta? (encaje, clásico, moderno, con perlas, otro)",
-    color: "¿Tenés algún color preferido?",
+    estilo: "¿Qué estilo de vestido te gusta? (encaje, clásico, moderno, con perlas, otro)\n\nTodos nuestros vestidos son blancos.",
     talle: "¿Cuál es tu talle aproximado?"
 };
 const RESERVATION_STEPS_ORDER = [
@@ -509,7 +508,6 @@ const RESERVATION_STEPS_ORDER = [
     "telefono",
     "fecha",
     "estilo",
-    "color",
     "talle",
     "confirmacion"
 ];
@@ -607,13 +605,14 @@ async function submitReservation(data) {
         },
         body: JSON.stringify(payload)
     });
+    const result = await response.json().catch(()=>({}));
     if (!response.ok) {
-        throw new Error("No se pudo enviar la solicitud");
+        throw new Error(result.message || "No se pudo enviar la solicitud");
     }
-    return response.json();
+    return result;
 }
 function isReservationComplete(data) {
-    return Boolean(data.nombre && data.telefono && data.fechaBoda && data.estiloPreferido && data.colorPreferido && data.talleAproximado);
+    return Boolean(data.nombre && data.telefono && data.fechaBoda && data.estiloPreferido && data.talleAproximado);
 }
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
@@ -730,7 +729,6 @@ function useChatbot() {
                 telefono: "telefono",
                 fecha: "fechaBoda",
                 estilo: "estiloPreferido",
-                color: "colorPreferido",
                 talle: "talleAproximado"
             };
             if (reservationStep === "idle" || reservationStep === "confirmacion" || reservationStep === "enviado") {
@@ -747,7 +745,6 @@ function useChatbot() {
                 "telefono",
                 "fecha",
                 "estilo",
-                "color",
                 "talle"
             ];
             const currentIndex = order.indexOf(reservationStep);
@@ -762,10 +759,11 @@ function useChatbot() {
             try {
                 await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$reservation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["submitReservation"])(nextData);
                 setReservationStep("enviado");
-                pushAssistant("¡Listo, ".concat(nextData.nombre, "! Recibimos tu solicitud de cita.\n\nResumen:\n• Teléfono: ").concat(nextData.telefono, "\n• Fecha de la boda: ").concat(nextData.fechaBoda, "\n• Estilo: ").concat(nextData.estiloPreferido, "\n• Color: ").concat(nextData.colorPreferido, "\n• Talle: ").concat(nextData.talleAproximado, "\n\nUna asesora se va a comunicar con vos para confirmar el día y horario."));
-            } catch (e) {
+                pushAssistant("¡Listo, ".concat(nextData.nombre, "! Recibimos tu solicitud de cita.\n\nResumen:\n• Teléfono: ").concat(nextData.telefono, "\n• Fecha de la boda: ").concat(nextData.fechaBoda, "\n• Estilo: ").concat(nextData.estiloPreferido, "\n• Talle: ").concat(nextData.talleAproximado, "\n\nUna asesora se va a comunicar con vos para confirmar el día y horario."));
+            } catch (error) {
                 setReservationStep("idle");
-                pushAssistant("Hubo un inconveniente al enviar tu solicitud. Podés intentarlo de nuevo o escribirnos por WhatsApp.");
+                const detail = error instanceof Error && error.message ? error.message : "Error desconocido";
+                pushAssistant("Hubo un inconveniente al enviar tu solicitud.\n\nDetalle: ".concat(detail, "\n\nPodés intentarlo de nuevo o escribirnos por WhatsApp."));
                 setShowQuickReplies(true);
             } finally{
                 setIsTyping(false);

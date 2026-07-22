@@ -6,7 +6,7 @@ export function mapReservationToRow(payload) {
     telefono: payload.telefono,
     fecha_boda: payload.fechaBoda,
     estilo_preferido: payload.estiloPreferido,
-    color_preferido: payload.colorPreferido,
+    color_preferido: "Blanco",
     talle_aproximado: payload.talleAproximado,
     source: payload.source || "chatbot",
   };

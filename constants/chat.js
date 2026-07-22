@@ -12,8 +12,8 @@ export const RESERVATION_PROMPTS = {
   nombre: "Perfecto. Para agendar tu cita, ¿cuál es tu nombre?",
   telefono: "Gracias. ¿Cuál es tu número de teléfono?",
   fecha: "¿Cuál es la fecha de tu boda?",
-  estilo: "¿Qué estilo de vestido te gusta? (encaje, clásico, moderno, con perlas, otro)",
-  color: "¿Tenés algún color preferido?",
+  estilo:
+    "¿Qué estilo de vestido te gusta? (encaje, clásico, moderno, con perlas, otro)\n\nTodos nuestros vestidos son blancos.",
   talle: "¿Cuál es tu talle aproximado?",
 };
 
@@ -22,7 +22,6 @@ export const RESERVATION_STEPS_ORDER = [
   "telefono",
   "fecha",
   "estilo",
-  "color",
   "talle",
   "confirmacion",
 ];

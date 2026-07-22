@@ -87,7 +87,6 @@ export function useChatbot() {
         telefono: "telefono",
         fecha: "fechaBoda",
         estilo: "estiloPreferido",
-        color: "colorPreferido",
         talle: "talleAproximado",
       };
       if (
@@ -100,14 +99,7 @@ export function useChatbot() {
       const field = stepFieldMap[reservationStep];
       const nextData = { ...reservationData, [field]: trimmed };
       setReservationData(nextData);
-      const order = [
-        "nombre",
-        "telefono",
-        "fecha",
-        "estilo",
-        "color",
-        "talle",
-      ];
+      const order = ["nombre", "telefono", "fecha", "estilo", "talle"];
       const currentIndex = order.indexOf(reservationStep);
       const nextStep = order[currentIndex + 1];
       if (nextStep) {
@@ -121,12 +113,16 @@ export function useChatbot() {
         await submitReservation(nextData);
         setReservationStep("enviado");
         pushAssistant(
-          `¡Listo, ${nextData.nombre}! Recibimos tu solicitud de cita.\n\nResumen:\n• Teléfono: ${nextData.telefono}\n• Fecha de la boda: ${nextData.fechaBoda}\n• Estilo: ${nextData.estiloPreferido}\n• Color: ${nextData.colorPreferido}\n• Talle: ${nextData.talleAproximado}\n\nUna asesora se va a comunicar con vos para confirmar el día y horario.`,
+          `¡Listo, ${nextData.nombre}! Recibimos tu solicitud de cita.\n\nResumen:\n• Teléfono: ${nextData.telefono}\n• Fecha de la boda: ${nextData.fechaBoda}\n• Estilo: ${nextData.estiloPreferido}\n• Talle: ${nextData.talleAproximado}\n\nUna asesora se va a comunicar con vos para confirmar el día y horario.`,
         );
-      } catch {
+      } catch (error) {
         setReservationStep("idle");
+        const detail =
+          error instanceof Error && error.message
+            ? error.message
+            : "Error desconocido";
         pushAssistant(
-          "Hubo un inconveniente al enviar tu solicitud. Podés intentarlo de nuevo o escribirnos por WhatsApp.",
+          `Hubo un inconveniente al enviar tu solicitud.\n\nDetalle: ${detail}\n\nPodés intentarlo de nuevo o escribirnos por WhatsApp.`,
         );
         setShowQuickReplies(true);
       } finally {

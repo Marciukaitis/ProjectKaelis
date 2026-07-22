@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isResendConfigured, sendReservationEmail } from "@/lib/email";
-import { isSupabaseConfigured } from "@/lib/supabase";
+import { getSupabaseConfigError } from "@/lib/supabase";
 import { saveReservation } from "@/services/reservation.server";
 
 const REQUIRED_FIELDS = [
@@ -8,7 +8,6 @@ const REQUIRED_FIELDS = [
   "telefono",
   "fechaBoda",
   "estiloPreferido",
-  "colorPreferido",
   "talleAproximado",
 ];
 
@@ -20,15 +19,9 @@ const REQUIRED_FIELDS = [
  */
 export async function POST(request) {
   try {
-    if (!isSupabaseConfigured()) {
-      return NextResponse.json(
-        {
-          ok: false,
-          message:
-            "Supabase no está configurado. Revisá las variables de entorno.",
-        },
-        { status: 503 },
-      );
+    const configError = getSupabaseConfigError();
+    if (configError) {
+      return NextResponse.json({ ok: false, message: configError }, { status: 503 });
     }
 
     const body = await request.json();
@@ -49,7 +42,6 @@ export async function POST(request) {
       telefono: String(body.telefono).trim(),
       fechaBoda: String(body.fechaBoda).trim(),
       estiloPreferido: String(body.estiloPreferido).trim(),
-      colorPreferido: String(body.colorPreferido).trim(),
       talleAproximado: String(body.talleAproximado).trim(),
       source: body.source || "chatbot",
     };
@@ -79,8 +71,15 @@ export async function POST(request) {
   } catch (error) {
     console.error("[reservation] error:", error);
 
+    const isDev = process.env.NODE_ENV === "development";
+    const detail =
+      error instanceof Error ? error.message : "Error al procesar la solicitud";
+
     return NextResponse.json(
-      { ok: false, message: "Error al procesar la solicitud" },
+      {
+        ok: false,
+        message: isDev ? detail : "Error al procesar la solicitud",
+      },
       { status: 500 },
     );
   }
