@@ -1,45 +1,62 @@
 # Kaelis Atelier
 
-Landing page premium para alquiler de vestidos.
+Landing page premium para venta de vestidos de novia.
 
 ## Stack
 
-- Next.js 15
-- React 19
-- JavaScript
-- Tailwind CSS 4
-- Framer Motion
-- Lucide Icons
+- Next.js 15 + Vercel
+- Supabase (guardar citas)
+- Resend (email de notificación)
+- Chatbot con flujos (sin IA)
+- Tailwind CSS 4 · Framer Motion · Lucide Icons
 
-## Empezar
+## Empezar en local
 
 ```bash
 npm install
+cp .env.example .env.local
+# Completá las variables (Supabase + Resend)
 npm run dev
 ```
 
-Abrí [http://localhost:3000](http://localhost:3000).
+## Configurar Supabase
+
+1. Creá un proyecto en [supabase.com](https://supabase.com)
+2. En **SQL Editor**, ejecutá el contenido de `supabase/schema.sql`
+3. En **Settings → API**, copiá:
+   - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
+   - `service_role` key → `SUPABASE_SERVICE_ROLE_KEY`
+
+## Configurar Resend
+
+1. Creá cuenta en [resend.com](https://resend.com)
+2. Generá una API Key → `RESEND_API_KEY`
+3. Verificá un dominio o usá `onboarding@resend.dev` para pruebas
+4. Definí `RESEND_FROM` y `NOTIFICATION_EMAIL` (tu mail)
+
+## Desplegar en Vercel
+
+1. Subí el repo a GitHub
+2. Importá el proyecto en [vercel.com](https://vercel.com)
+3. Agregá las mismas variables de `.env.local` en **Settings → Environment Variables**
+4. Deploy
+
+## Flujo de una cita
+
+1. La clienta usa **Agendar cita** en el chatbot
+2. `POST /api/reservation` guarda en Supabase
+3. Resend te envía un correo con los datos
 
 ## Estructura
 
 ```
-app/           # App Router, layout, página y API routes
-components/    # UI, layout, chatbot, dresses, seo
-sections/      # Secciones de la landing
-hooks/         # Hooks (scroll, chatbot)
-lib/           # Utilidades y cliente de chat (OpenAI-ready)
-services/      # Capas de negocio (chat, reservation)
-constants/     # Contenido y configuración del sitio
-public/        # Assets estáticos
+app/              # App Router y API routes
+components/       # UI, layout, chatbot
+sections/         # Secciones de la landing
+hooks/            # Scroll, chatbot
+lib/              # Supabase, email, utilidades
+services/         # Lógica de negocio
+supabase/         # Schema SQL
+constants/        # Contenido del sitio
+public/           # Imágenes
 ```
-
-## APIs preparadas
-
-- `POST /api/reservation` — recibe reservas del chatbot (listo para n8n)
-- `POST /api/chat` — stub para OpenAI
-
-## Configuración
-
-1. Copiá `.env.example` a `.env.local`
-2. Completá `OPENAI_API_KEY` y `N8N_WEBHOOK_URL` cuando los actives
-3. Actualizá WhatsApp / Instagram en `constants/site.ts`

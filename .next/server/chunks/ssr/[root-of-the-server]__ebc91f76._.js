@@ -552,9 +552,8 @@ async function askAssistant(request) {
 "use strict";
 
 /**
- * Servicio de citas.
- * El frontend envía a POST /api/reservation.
- * Ese endpoint luego reenviará a un webhook de n8n.
+ * Servicio de citas (cliente).
+ * Envía los datos a POST /api/reservation → Supabase + Resend.
  */ __turbopack_context__.s([
     "isReservationComplete",
     ()=>isReservationComplete,
