@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #111111;
+  --kaelis-ink: #111111;
+  --kaelis-muted: #666666;
+  --kaelis-border: #eaeaea;
+  --kaelis-secondary: #d8c3a5;
+  --kaelis-hover: #c6a980;
+  --kaelis-soft: #faf8f5;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-kaelis-ink: var(--kaelis-ink);
+  --color-kaelis-muted: var(--kaelis-muted);
+  --color-kaelis-border: var(--kaelis-border);
+  --color-kaelis-secondary: var(--kaelis-secondary);
+  --color-kaelis-hover: var(--kaelis-hover);
+  --color-kaelis-soft: var(--kaelis-soft);
+  --font-sans: var(--font-poppins);
+  --font-display: var(--font-playfair);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-poppins), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-display {
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--kaelis-secondary) 55%, white);
+  color: var(--kaelis-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--kaelis-secondary);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
