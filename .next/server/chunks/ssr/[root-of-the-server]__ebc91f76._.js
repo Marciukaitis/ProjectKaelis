@@ -657,13 +657,16 @@ function useChatbot() {
         }
         if (action === "disponibilidad") {
             pushAssistant("Para consultar un modelo, contame el vestido que te interesa y la fecha de tu boda. También podés escribirnos por WhatsApp y te respondemos a la brevedad.");
+            setShowQuickReplies(true);
             return;
         }
         if (action === "talles") {
             pushAssistant("Trabajamos con talles aproximados del XS al XL. En la cita te ayudamos a encontrar el ajuste ideal y, si hace falta, coordinamos arreglos.");
+            setShowQuickReplies(true);
             return;
         }
         pushAssistant(`Perfecto. Podés hablar directamente con una asesora por WhatsApp: ${__TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$site$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SITE"].whatsapp}\n\nTambién estamos en Instagram: ${__TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$site$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SITE"].instagramHandle}`);
+        setShowQuickReplies(true);
     }, [
         pushAssistant,
         pushUser,
@@ -706,8 +709,10 @@ function useChatbot() {
         setIsTyping(true);
         try {
             await (0, __TURBOPACK__imported__module__$5b$project$5d2f$services$2f$reservation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["submitReservation"])(nextData);
-            setReservationStep("enviado");
-            pushAssistant(`¡Listo, ${nextData.nombre}! Recibimos tu solicitud de cita.\n\nResumen:\n• Teléfono: ${nextData.telefono}\n• Fecha de la boda: ${nextData.fechaBoda}\n• Estilo: ${nextData.estiloPreferido}\n• Talle: ${nextData.talleAproximado}\n\nUna asesora se va a comunicar con vos para confirmar el día y horario.`);
+            pushAssistant(`¡Listo, ${nextData.nombre}! Recibimos tu solicitud de cita.\n\nResumen:\n• Teléfono: ${nextData.telefono}\n• Fecha de la boda: ${nextData.fechaBoda}\n• Estilo: ${nextData.estiloPreferido}\n• Talle: ${nextData.talleAproximado}\n\nUna asesora se va a comunicar con vos para confirmar el día y horario.\n\n¿Te puedo ayudar con algo más?`);
+            setReservationStep("idle");
+            setReservationData(emptyReservation);
+            setShowQuickReplies(true);
         } catch (error) {
             setReservationStep("idle");
             const detail = error instanceof Error && error.message ? error.message : "Error desconocido";
@@ -749,8 +754,10 @@ function useChatbot() {
                 }
             });
             pushAssistant(response.message);
+            setShowQuickReplies(true);
         } catch  {
             pushAssistant("No pude procesar tu mensaje ahora. Probá las opciones rápidas o escribinos por WhatsApp.");
+            setShowQuickReplies(true);
         } finally{
             setIsTyping(false);
         }
@@ -764,19 +771,31 @@ function useChatbot() {
         reservationData,
         reservationStep
     ]);
+    const resetConversation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        setMessages([
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$chat$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createWelcomeMessage"])()
+        ]);
+        setInput("");
+        setIsTyping(false);
+        setShowQuickReplies(true);
+        setReservationStep("idle");
+        setReservationData(emptyReservation);
+    }, []);
     const open = ()=>setIsOpen(true);
     const close = ()=>setIsOpen(false);
     const toggle = ()=>setIsOpen((v)=>!v);
+    const isInReservationFlow = reservationStep !== "idle" && reservationStep !== "enviado" && reservationStep !== "confirmacion";
     return {
         isOpen,
         open,
         close,
         toggle,
+        resetConversation,
         messages,
         input,
         setInput,
         isTyping,
-        showQuickReplies: showQuickReplies && reservationStep === "idle",
+        showQuickReplies: showQuickReplies && !isInReservationFlow,
         quickReplies: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$chat$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["QUICK_REPLIES"],
         handleQuickAction,
         sendMessage,
@@ -794,6 +813,7 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$circle$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/message-circle.mjs [app-ssr] (ecmascript) <export default as MessageCircle>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$ccw$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCcw$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/rotate-ccw.mjs [app-ssr] (ecmascript) <export default as RotateCcw>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$send$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Send$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/send.mjs [app-ssr] (ecmascript) <export default as Send>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.mjs [app-ssr] (ecmascript) <export default as X>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs [app-ssr] (ecmascript)");
@@ -827,7 +847,7 @@ function QuickReplies({ replies, onSelect }) {
     }, this);
 }
 function Chatbot() {
-    const { isOpen, open, toggle, close, messages, input, setInput, isTyping, showQuickReplies, quickReplies, handleQuickAction, sendMessage } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useChatbot$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useChatbot"])();
+    const { isOpen, open, toggle, close, messages, input, setInput, isTyping, showQuickReplies, quickReplies, handleQuickAction, sendMessage, resetConversation } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$useChatbot$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useChatbot"])();
     const messagesEndRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         messagesEndRef.current?.scrollIntoView({
@@ -887,7 +907,7 @@ function Chatbot() {
                                             children: "Asesora Kaelis"
                                         }, void 0, false, {
                                             fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                            lineNumber: 70,
+                                            lineNumber: 71,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -895,36 +915,63 @@ function Chatbot() {
                                             children: "Te ayudamos a encontrar tu vestido de novia"
                                         }, void 0, false, {
                                             fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                            lineNumber: 73,
+                                            lineNumber: 74,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                    lineNumber: 69,
+                                    lineNumber: 70,
                                     columnNumber: 15
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    type: "button",
-                                    onClick: close,
-                                    "aria-label": "Cerrar chat",
-                                    className: "rounded-full p-2 text-kaelis-muted transition-colors hover:bg-white hover:text-kaelis-ink",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                        className: "h-4 w-4"
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                        lineNumber: 83,
-                                        columnNumber: 17
-                                    }, this)
-                                }, void 0, false, {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center gap-1",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            type: "button",
+                                            onClick: resetConversation,
+                                            "aria-label": "Nueva conversación",
+                                            title: "Nueva conversación",
+                                            className: "rounded-full p-2 text-kaelis-muted transition-colors hover:bg-white hover:text-kaelis-ink",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$ccw$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCcw$3e$__["RotateCcw"], {
+                                                className: "h-4 w-4"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/chatbot/Chatbot.jsx",
+                                                lineNumber: 86,
+                                                columnNumber: 19
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/chatbot/Chatbot.jsx",
+                                            lineNumber: 79,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            type: "button",
+                                            onClick: close,
+                                            "aria-label": "Cerrar chat",
+                                            className: "rounded-full p-2 text-kaelis-muted transition-colors hover:bg-white hover:text-kaelis-ink",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                                className: "h-4 w-4"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/chatbot/Chatbot.jsx",
+                                                lineNumber: 94,
+                                                columnNumber: 19
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/chatbot/Chatbot.jsx",
+                                            lineNumber: 88,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
                                     fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                    lineNumber: 77,
+                                    lineNumber: 78,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/chatbot/Chatbot.jsx",
-                            lineNumber: 68,
+                            lineNumber: 69,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -938,12 +985,12 @@ function Chatbot() {
                                             children: message.content
                                         }, void 0, false, {
                                             fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                            lineNumber: 99,
+                                            lineNumber: 111,
                                             columnNumber: 19
                                         }, this)
                                     }, message.id, false, {
                                         fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                        lineNumber: 92,
+                                        lineNumber: 104,
                                         columnNumber: 17
                                     }, this)),
                                 isTyping ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -953,33 +1000,40 @@ function Chatbot() {
                                         children: "Escribiendo…"
                                     }, void 0, false, {
                                         fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                        lineNumber: 114,
+                                        lineNumber: 126,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                    lineNumber: 113,
+                                    lineNumber: 125,
                                     columnNumber: 17
                                 }, this) : null,
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     ref: messagesEndRef
                                 }, void 0, false, {
                                     fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                    lineNumber: 119,
+                                    lineNumber: 131,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/chatbot/Chatbot.jsx",
-                            lineNumber: 87,
+                            lineNumber: 99,
                             columnNumber: 13
                         }, this),
-                        showQuickReplies ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(QuickReplies, {
-                            replies: quickReplies,
-                            onSelect: handleQuickAction
+                        showQuickReplies ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "border-t border-kaelis-border/60",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(QuickReplies, {
+                                replies: quickReplies,
+                                onSelect: handleQuickAction
+                            }, void 0, false, {
+                                fileName: "[project]/components/chatbot/Chatbot.jsx",
+                                lineNumber: 136,
+                                columnNumber: 17
+                            }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/chatbot/Chatbot.jsx",
-                            lineNumber: 123,
+                            lineNumber: 135,
                             columnNumber: 15
                         }, this) : null,
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -995,7 +1049,7 @@ function Chatbot() {
                                     children: "Escribí tu mensaje"
                                 }, void 0, false, {
                                     fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                    lineNumber: 136,
+                                    lineNumber: 150,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1007,7 +1061,7 @@ function Chatbot() {
                                     autoComplete: "off"
                                 }, void 0, false, {
                                     fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                    lineNumber: 139,
+                                    lineNumber: 153,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1019,29 +1073,29 @@ function Chatbot() {
                                         className: "h-4 w-4"
                                     }, void 0, false, {
                                         fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                        lineNumber: 153,
+                                        lineNumber: 167,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/chatbot/Chatbot.jsx",
-                                    lineNumber: 147,
+                                    lineNumber: 161,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/chatbot/Chatbot.jsx",
-                            lineNumber: 129,
+                            lineNumber: 143,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/chatbot/Chatbot.jsx",
-                    lineNumber: 58,
+                    lineNumber: 59,
                     columnNumber: 11
                 }, this) : null
             }, void 0, false, {
                 fileName: "[project]/components/chatbot/Chatbot.jsx",
-                lineNumber: 56,
+                lineNumber: 57,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
@@ -1059,24 +1113,24 @@ function Chatbot() {
                     className: "h-5 w-5"
                 }, void 0, false, {
                     fileName: "[project]/components/chatbot/Chatbot.jsx",
-                    lineNumber: 169,
+                    lineNumber: 183,
                     columnNumber: 11
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$circle$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageCircle$3e$__["MessageCircle"], {
                     className: "h-5 w-5"
                 }, void 0, false, {
                     fileName: "[project]/components/chatbot/Chatbot.jsx",
-                    lineNumber: 171,
+                    lineNumber: 185,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/chatbot/Chatbot.jsx",
-                lineNumber: 160,
+                lineNumber: 174,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/chatbot/Chatbot.jsx",
-        lineNumber: 55,
+        lineNumber: 56,
         columnNumber: 5
     }, this);
 }

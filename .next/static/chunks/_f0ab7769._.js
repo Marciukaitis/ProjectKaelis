@@ -95,7 +95,7 @@ function Hero() {
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "relative z-10 mx-auto w-full max-w-6xl px-5 pb-20 pt-32 sm:px-8 sm:pb-28 lg:px-10",
+                className: "relative z-10 mx-auto w-full max-w-6xl px-5 pb-20 pt-36 sm:px-8 sm:pb-28 sm:pt-40 lg:px-10",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
                     initial: {
                         opacity: 0,
@@ -112,8 +112,8 @@ function Hero() {
                     className: "max-w-2xl",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "mb-5 font-display text-2xl tracking-wide text-white sm:text-3xl",
-                            children: __TURBOPACK__imported__module__$5b$project$5d2f$constants$2f$site$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SITE"].name
+                            className: "mb-5 text-sm uppercase tracking-[0.28em] text-white/75",
+                            children: "Vestidos de novia"
                         }, void 0, false, {
                             fileName: "[project]/sections/Hero.jsx",
                             lineNumber: 36,

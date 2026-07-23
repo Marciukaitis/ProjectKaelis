@@ -1,11 +1,10 @@
 export const CHAT_WELCOME_MESSAGE =
-  "¡Hola! Soy la asistente virtual de Kaelis Atelier ✨\n\nEstoy para ayudarte a encontrar tu vestido de novia ideal.\n\nPodés consultarme modelos, talles, citas o cualquier duda.";
+  "¡Hola! Soy la asistente virtual de Kaelis Atelier ✨\n\nEstoy para ayudarte a encontrar tu vestido de novia ideal.\n\nPodés agendar una cita, consultar talles o cualquier duda.";
 
 export const QUICK_REPLIES = [
   { id: "1", label: "Agendar una cita", action: "reservar" },
-  { id: "2", label: "Consultar un modelo", action: "disponibilidad" },
-  { id: "3", label: "Ver talles", action: "talles" },
-  { id: "4", label: "Hablar con una asesora", action: "asesora" },
+  { id: "2", label: "Ver talles", action: "talles" },
+  { id: "3", label: "Hablar con una asesora", action: "asesora" },
 ];
 
 export const RESERVATION_PROMPTS = {

@@ -65,14 +65,17 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico" },
       { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
     ],
-    apple: [{ url: "/apple-touch-icon.png" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/icon.svg"],
   },
 };
 export const viewport = {
-  themeColor: "#FFFFFF",
+  themeColor: "#FAF8F5",
   width: "device-width",
   initialScale: 1,
 };

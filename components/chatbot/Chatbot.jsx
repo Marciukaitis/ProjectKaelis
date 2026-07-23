@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { MessageCircle, Send, X } from "lucide-react";
+import { MessageCircle, RotateCcw, Send, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { PRIVACY_SUMMARY } from "@/constants/privacy";
 import { useChatbot } from "@/hooks/useChatbot";
 import { cn } from "@/lib/utils";
 function QuickReplies({ replies, onSelect }) {
@@ -34,6 +35,8 @@ export function Chatbot() {
     quickReplies,
     handleQuickAction,
     sendMessage,
+    resetConversation,
+    reservationStep,
   } = useChatbot();
   const messagesEndRef = useRef(null);
   useEffect(() => {
@@ -74,14 +77,25 @@ export function Chatbot() {
                   Te ayudamos a encontrar tu vestido de novia
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={close}
-                aria-label="Cerrar chat"
-                className="rounded-full p-2 text-kaelis-muted transition-colors hover:bg-white hover:text-kaelis-ink"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={resetConversation}
+                  aria-label="Nueva conversación"
+                  title="Nueva conversación"
+                  className="rounded-full p-2 text-kaelis-muted transition-colors hover:bg-white hover:text-kaelis-ink"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={close}
+                  aria-label="Cerrar chat"
+                  className="rounded-full p-2 text-kaelis-muted transition-colors hover:bg-white hover:text-kaelis-ink"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
             </div>
 
             <div
@@ -120,10 +134,20 @@ export function Chatbot() {
             </div>
 
             {showQuickReplies ? (
-              <QuickReplies
-                replies={quickReplies}
-                onSelect={handleQuickAction}
-              />
+              <div className="border-t border-kaelis-border/60">
+                <QuickReplies
+                  replies={quickReplies}
+                  onSelect={handleQuickAction}
+                />
+              </div>
+            ) : null}
+
+            {reservationStep !== "idle" &&
+            reservationStep !== "confirmacion" &&
+            reservationStep !== "enviado" ? (
+              <p className="border-t border-kaelis-border/60 px-4 py-2 text-[11px] leading-relaxed text-kaelis-muted">
+                {PRIVACY_SUMMARY}
+              </p>
             ) : null}
 
             <form

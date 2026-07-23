@@ -18,4 +18,6 @@ export const SITE = {
     country: "UY",
   },
   ogImage: "/og-image.png",
+  logo: "/logo-light.png",
+  logoDark: "/logo-dark.png",
 };

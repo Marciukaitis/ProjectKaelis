@@ -50,7 +50,6 @@ export function useChatbot() {
     (action) => {
       const labels = {
         reservar: "Agendar una cita",
-        disponibilidad: "Consultar un modelo",
         talles: "Ver talles",
         asesora: "Hablar con una asesora",
       };
@@ -60,21 +59,17 @@ export function useChatbot() {
         startReservation();
         return;
       }
-      if (action === "disponibilidad") {
-        pushAssistant(
-          "Para consultar un modelo, contame el vestido que te interesa y la fecha de tu boda. También podés escribirnos por WhatsApp y te respondemos a la brevedad.",
-        );
-        return;
-      }
       if (action === "talles") {
         pushAssistant(
           "Trabajamos con talles aproximados del XS al XL. En la cita te ayudamos a encontrar el ajuste ideal y, si hace falta, coordinamos arreglos.",
         );
+        setShowQuickReplies(true);
         return;
       }
       pushAssistant(
         `Perfecto. Podés hablar directamente con una asesora por WhatsApp: ${SITE.whatsapp}\n\nTambién estamos en Instagram: ${SITE.instagramHandle}`,
       );
+      setShowQuickReplies(true);
     },
     [pushAssistant, pushUser, startReservation],
   );
@@ -111,10 +106,12 @@ export function useChatbot() {
       setIsTyping(true);
       try {
         await submitReservation(nextData);
-        setReservationStep("enviado");
         pushAssistant(
-          `¡Listo, ${nextData.nombre}! Recibimos tu solicitud de cita.\n\nResumen:\n• Teléfono: ${nextData.telefono}\n• Fecha de la boda: ${nextData.fechaBoda}\n• Estilo: ${nextData.estiloPreferido}\n• Talle: ${nextData.talleAproximado}\n\nUna asesora se va a comunicar con vos para confirmar el día y horario.`,
+          `¡Listo, ${nextData.nombre}! Recibimos tu solicitud de cita.\n\nResumen:\n• Teléfono: ${nextData.telefono}\n• Fecha de la boda: ${nextData.fechaBoda}\n• Estilo: ${nextData.estiloPreferido}\n• Talle: ${nextData.talleAproximado}\n\nUna asesora se va a comunicar con vos para confirmar el día y horario.\n\n¿Te puedo ayudar con algo más?`,
         );
+        setReservationStep("idle");
+        setReservationData(emptyReservation);
+        setShowQuickReplies(true);
       } catch (error) {
         setReservationStep("idle");
         const detail =
@@ -156,10 +153,12 @@ export function useChatbot() {
         context: { reservationStep, reservationData },
       });
       pushAssistant(response.message);
+      setShowQuickReplies(true);
     } catch {
       pushAssistant(
         "No pude procesar tu mensaje ahora. Probá las opciones rápidas o escribinos por WhatsApp.",
       );
+      setShowQuickReplies(true);
     } finally {
       setIsTyping(false);
     }
@@ -173,19 +172,35 @@ export function useChatbot() {
     reservationData,
     reservationStep,
   ]);
+  const resetConversation = useCallback(() => {
+    setMessages([createWelcomeMessage()]);
+    setInput("");
+    setIsTyping(false);
+    setShowQuickReplies(true);
+    setReservationStep("idle");
+    setReservationData(emptyReservation);
+  }, []);
+
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
   const toggle = () => setIsOpen((v) => !v);
+
+  const isInReservationFlow =
+    reservationStep !== "idle" &&
+    reservationStep !== "enviado" &&
+    reservationStep !== "confirmacion";
+
   return {
     isOpen,
     open,
     close,
     toggle,
+    resetConversation,
     messages,
     input,
     setInput,
     isTyping,
-    showQuickReplies: showQuickReplies && reservationStep === "idle",
+    showQuickReplies: showQuickReplies && !isInReservationFlow,
     quickReplies: QUICK_REPLIES,
     handleQuickAction,
     sendMessage,

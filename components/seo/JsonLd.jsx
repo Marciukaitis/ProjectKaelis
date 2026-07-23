@@ -10,6 +10,7 @@ export function JsonLd() {
     telephone: SITE.phone,
     email: SITE.email,
     image: `${SITE.url}${SITE.ogImage}`,
+    logo: `${SITE.url}${SITE.logo}`,
     address: {
       "@type": "PostalAddress",
       addressLocality: SITE.address.city,

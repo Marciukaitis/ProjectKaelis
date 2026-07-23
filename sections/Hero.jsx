@@ -26,15 +26,15 @@ export function Hero() {
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-20 pt-32 sm:px-8 sm:pb-28 lg:px-10">
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-20 pt-36 sm:px-8 sm:pb-28 sm:pt-40 lg:px-10">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: "easeOut" }}
           className="max-w-2xl"
         >
-          <p className="mb-5 font-display text-2xl tracking-wide text-white sm:text-3xl">
-            {SITE.name}
+          <p className="mb-5 text-sm uppercase tracking-[0.28em] text-white/75">
+            Vestidos de novia
           </p>
           <h1 className="font-display text-4xl leading-[1.15] text-white sm:text-5xl lg:text-6xl">
             Encontrá el vestido de novia perfecto para tu boda.

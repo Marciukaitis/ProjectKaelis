@@ -4,11 +4,11 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { NAV_ITEMS } from "@/constants/navigation";
-import { SITE } from "@/constants/site";
 import { openAppointmentChat } from "@/lib/appointments";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { cn, scrollToId } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
+import { BrandLink } from "@/components/ui/BrandLink";
 export function Navbar() {
   const scrolled = useScrollPosition(24);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -31,18 +31,12 @@ export function Navbar() {
     >
       <nav
         aria-label="Principal"
-        className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:h-20 sm:px-8 lg:px-10"
+        className="mx-auto flex h-20 max-w-6xl items-center justify-between px-5 sm:px-8 lg:px-10"
       >
-        <Link
-          href="#inicio"
-          className={cn(
-            "font-display text-xl tracking-wide transition-colors sm:text-2xl",
-            scrolled ? "text-kaelis-ink" : "text-white",
-          )}
-          onClick={(event) => handleNavClick(event, "#inicio")}
-        >
-          {SITE.name}
-        </Link>
+        <BrandLink
+          scrolled={scrolled}
+          onNavigate={() => setMobileOpen(false)}
+        />
 
         <ul className="hidden items-center gap-8 lg:flex">
           {NAV_ITEMS.map((item) => (
